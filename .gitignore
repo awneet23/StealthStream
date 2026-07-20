@@ -1,0 +1,14 @@
+node_modules
+dist
+artifacts
+cache
+.agents
+.env
+.env.local
+# Personal setup/submission guides: useful locally, not part of the public repo.
+docs/JUDGE_DEMO_GUIDE.md
+docs/SUBMISSION_CHECKLIST.md
+docs/GITHUB_VERCEL_GUIDE.md
+docs/screenshots/README.md
+docs/PRODUCTION_INTEGRATION.md
+docs/PITCH_DECK_OUTLINE.md

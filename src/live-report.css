@@ -1,0 +1,17 @@
+/* Keeps long on-chain addresses and transaction hashes inside the audit table. */
+.report .tip-row {
+  grid-template-columns: minmax(0, 1.35fr) minmax(90px, 0.65fr) minmax(75px, 0.7fr) minmax(0, 1.2fr);
+  gap: 12px;
+}
+
+.report .tip-row > * { min-width: 0; }
+
+.report .supporter,
+.report .tip-row a {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.report .tiny-avatar { min-width: 25px; }
+.report .amount { white-space: nowrap; }

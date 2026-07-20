@@ -1,0 +1,48 @@
+{
+  "name": "stealthstream",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "contracts:compile": "hardhat compile && node scripts/export-abi.mjs",
+    "contracts:abi": "node scripts/export-abi.mjs",
+    "contracts:test": "node --import tsx/esm --test test/*.ts",
+    "deploy:fuji": "hardhat run scripts/deploy-registry.ts --network fuji",
+    "register:creator": "hardhat run scripts/register-creator.ts --network fuji",
+    "verify:fuji": "hardhat verify --network fuji"
+  },
+  "dependencies": {
+    "@avalabs/eerc-sdk": "1.0.2",
+    "@tanstack/react-query": "^5.90.20",
+    "@vitejs/plugin-react": "^4.3.4",
+    "@zk-kit/baby-jubjub": "^1.0.3",
+    "@zk-kit/poseidon-cipher": "^0.3.2",
+    "blake-hash": "^2.0.0",
+    "buffer": "^6.0.3",
+    "dotenv": "^16.6.1",
+    "ethers": "^6.16.0",
+    "lucide-react": "^0.468.0",
+    "poseidon-lite": "^0.3.0",
+    "process": "^0.11.10",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "recharts": "^2.15.0",
+    "snarkjs": "^0.7.5",
+    "typescript": "^5.7.2",
+    "viem": "^2.55.4",
+    "vite": "^6.0.5",
+    "wagmi": "2.19.5"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "4.0.15",
+    "@nomicfoundation/hardhat-verify": "3.0.21",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@types/snarkjs": "^0.7.9",
+    "hardhat": "3.10.0",
+    "tsx": "^4.19.3"
+  }
+}
