@@ -4,16 +4,18 @@ StealthStream lets supporters send encrypted creator tips using Ava Labs eERC on
 
 **This is a working Fuji prototype, not a frontend-only simulation.** Demo Mode remains available for a wallet-free walkthrough, while Live Mode uses MetaMask, a deployed eERC contract, and a deployed Solidity registry.
 
-## Hackathon demo in 60 seconds
+**[Open the live app](https://stealth-stream-seven.vercel.app)** · **[Watch the live demo video](https://www.youtube.com/watch?v=njZs5hv6tt8)**
 
-1. Open the deployed website (or run it locally).
-2. Connect MetaMask on **Avalanche Fuji**.
-3. Use the **Tip** page to send encrypted eERC to `@awneet`.
-4. Confirm the eERC transaction, then the registry transaction in MetaMask.
-5. Switch to the configured auditor wallet and open **Auditor**.
-6. Generate the report. It decrypts the real 10 eERC transfer locally for the authorized auditor.
+## Hackathon demo flow
 
-The project also has a safe **Demo Mode** for judges who do not have a Fuji wallet.
+1. Open the [live app](https://stealth-stream-seven.vercel.app) with the eERC owner wallet connected to **Avalanche Fuji**.
+2. The eERC owner unlocks its local encrypted wallet with a MetaMask signature, then privately mints test eERC to a registered sender.
+3. Switch MetaMask to the pre-registered sender wallet. It unlocks its local encrypted wallet, enters `@awneet` on **Tip**, and the deployed registry resolves the creator wallet automatically.
+4. Confirm the encrypted eERC transfer, then the separate `StealthTipRegistry.recordTip` transaction in MetaMask.
+5. Switch MetaMask back to the configured eERC auditor wallet and use **Open verified report** in Creator Studio.
+6. Generate the report and export CSV. It decrypts confirmed incoming encrypted transfers locally for the authorized auditor.
+
+The [video walkthrough](https://www.youtube.com/watch?v=njZs5hv6tt8) shows this complete flow with real Avalanche Fuji transactions. **Demo Mode** remains available for a wallet-free local walkthrough.
 
 ## Live Fuji proof
 
@@ -132,15 +134,16 @@ Do **not** put a private key in any variable beginning with `VITE_`. Vite expose
 
 The required matching `.wasm` and `.zkey` proving artifacts are already included under `public/circuits/official`. Do **not** add `VITE_EERC_*_WASM` or `*_ZKEY` values.
 
-### Live test path for a judge
+### Live demonstration path
 
-1. In MetaMask, select **Avalanche Fuji C-Chain**.
-2. Connect the deployed eERC sender wallet. It must already be registered with this eERC Registrar.
-3. Open **Tip** and choose `@awneet`.
-4. Enter a small valid amount, such as `10`.
-5. Approve the eERC transfer and then the registry `recordTip` transaction.
-6. For the audit demonstration, connect the configured auditor wallet, open **Auditor**, and click **Generate tax report**.
-7. Click **Export CSV** to download the decrypted report.
+The live encrypted flow uses pre-registered eERC test wallets because eERC identities are tied to a wallet signature and registrar entry.
+
+1. Select **Avalanche Fuji C-Chain** in MetaMask.
+2. Connect a sender wallet registered with this EncryptedERC deployment and unlock its local encrypted wallet from **Wallet & audit settings**.
+3. Open **Tip**, enter `@awneet`, and confirm that the creator wallet is resolved from the deployed registry.
+4. Enter a small valid eERC amount and approve the encrypted eERC transfer followed by the registry `recordTip` transaction.
+5. Connect the configured auditor wallet, use **Open verified report**, then click **Generate tax report**.
+6. Click **Export CSV** or open a transaction hash in Snowtrace for independent Fuji confirmation.
 
 The UI waits for confirmed Fuji receipts before reporting success. If the eERC transfer succeeds but the registry write is interrupted, the app retains the reference locally and retries the registry write rather than sending a duplicate tip.
 
@@ -191,19 +194,6 @@ npm run register:creator
 ```
 
 Never commit `.env` or use a wallet holding real mainnet funds as the deployer.
-
-## Permissioned L1 status
-
-`l1/genesis.example.json` contains a permissioned-L1 genesis template with transaction and contract-deployer allowlists.
-
-**It is a template only; a separate running L1 has not been deployed.** The Fuji eERC prototype is complete without it. Deploying and wiring eERC to a permissioned L1 is an optional expansion/bonus path, not a claim made by this repository.
-
-## Known limits and next steps
-
-- No backend indexer yet; the live audited report reads eERC activity directly.
-- eERC decryption material is cached in browser local storage for hackathon usability. Production should use a hardened key-management approach.
-- Client-side proof generation makes the bundle large.
-- A production rollout needs stronger access controls, monitoring, formal testing, and an external audit.
 
 ## Official references
 
