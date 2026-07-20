@@ -323,7 +323,7 @@ function Feature({ icon, title, text }: { icon: React.ReactNode; title: string; 
 }
 
 function TipPage({ connection, live }: { connection: ConnectState; live?: LiveActions }) {
-  const [handle, setHandle] = useState("@alice_streams");
+  const [handle, setHandle] = useState(connection.mode === "live" ? "" : "@alice_streams");
   const [recipient, setRecipient] = useState("");
   const [amount, setAmount] = useState("50");
   const [reveal, setReveal] = useState(false);
@@ -331,6 +331,34 @@ function TipPage({ connection, live }: { connection: ConnectState; live?: LiveAc
   const [error, setError] = useState("");
   const [lastTx, setLastTx] = useState<string>("");
   const selected = demoCreators.find((creator) => creator.handle === handle);
+
+  // In Live Mode, resolve the recipient from the deployed Fuji registry so
+  // users never need to copy a creator's wallet address by hand.
+  useEffect(() => {
+    let cancelled = false;
+    const normalizedHandle = handle.trim();
+
+    if (connection.mode !== "live" || !live || !registryAddress || !normalizedHandle) {
+      if (connection.mode === "live" && !normalizedHandle) setRecipient("");
+      return () => { cancelled = true; };
+    }
+
+    void (async () => {
+      try {
+        const resolved = await live.publicClient.readContract({
+          address: registryAddress,
+          abi: stealthTipRegistryAbi,
+          functionName: "creatorForHandle",
+          args: [normalizedHandle],
+        }) as Address;
+        if (!cancelled) setRecipient(resolved === zeroAddress ? "" : resolved);
+      } catch {
+        if (!cancelled) setRecipient("");
+      }
+    })();
+
+    return () => { cancelled = true; };
+  }, [connection.mode, handle, live]);
 
   const submit = async () => {
     if (!connection.wallet) {
